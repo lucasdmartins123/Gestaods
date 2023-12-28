@@ -152,7 +152,8 @@ const PatientListStyled = styled.div`
 
 export default function PatientsPage() {
   const { search, setSearch } = useState("");
-  const { loadPatients, patients } = usePatients();
+  const { loadPatients, patients, searchs } = usePatients();
+  const [searchResult, setSearchResult] = useState([]);
   const [showState, setShowState] = useState(false);
 
   console.log(patients);
@@ -166,6 +167,21 @@ export default function PatientsPage() {
 
     return formatedDate;
   };
+
+  const formatCpf = (cpf) => {
+    cpf = cpf.replace(/\D/g, "");
+
+    cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+
+    return cpf;
+  };
+
+  useEffect(() => {
+    const patientFilter = patients.filter((patient) =>
+      patient?.patient?.toLowerCase().includes(searchs.toLowerCase())
+    );
+    setSearchResult(patientFilter);
+  }, [searchs]);
 
   //useEffect para carregar os pacientes
   useEffect(() => {
@@ -237,7 +253,7 @@ export default function PatientsPage() {
           {patients?.map((patient, index) => (
             <PatientListStyled key={index}>
               <p>{patient.patient}</p>
-              <p>{patient.cpf}</p>
+              <p>{formatCpf(patient.cpf)}</p>
               <p>{formatDate(patient.birth)}</p>
               <p>{`${patient.patient.toLowerCase()}@gestaods.com.br`}</p>
               <p>{patient.city}</p>

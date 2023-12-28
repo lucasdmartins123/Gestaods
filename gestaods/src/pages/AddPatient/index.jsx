@@ -95,9 +95,30 @@ const InputContainerStyled = styled.div`
   }
 `;
 
-//estilização do label das observações adicionais
-const LabelObservationsStyled = styled.label`
-  padding-top: 15px;
+//estilização do container das observações adicionais
+const ObservationsContainerStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px;
+  overflow: hidden;
+  width: 100%;
+  label {
+    padding-top: 15px;
+  }
+
+  textarea {
+    border-radius: 5px;
+    border: 1px solid #e8e8e8;
+    padding: 10px 15px;
+    max-width: 100%;
+    width: 100%;
+    height: 73px;
+    max-height: 100%;
+    outline: none;
+    resize: none;
+  }
 `;
 
 //estilização do container do botão
@@ -353,12 +374,9 @@ export default function AddPatient() {
                       </select>
                     </InputContainerStyled>
                   </InfosStyled>
-                  <InputContainerStyled>
-                    <LabelObservationsStyled>
-                      Observações adicionais
-                    </LabelObservationsStyled>
-                    <input
-                      type="text"
+                  <ObservationsContainerStyled>
+                    <label>Observações adicionais</label>
+                    <textarea
                       placeholder="Digite"
                       onChange={(e) =>
                         setData((prev) => ({
@@ -367,8 +385,8 @@ export default function AddPatient() {
                         }))
                       }
                       value={data.addtionalObersavations}
-                    ></input>
-                  </InputContainerStyled>
+                    ></textarea>
+                  </ObservationsContainerStyled>
                   <ButtonContainerStyled>
                     <ButtonStyled onClick={changeToContact} type="button">
                       Próximo

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   addDoc,
   getDocs,
@@ -12,6 +12,7 @@ import { db } from "../Firebase/config";
 const usePatients = () => {
   const [loading, setLoading] = useState(false);
   const [patients, setPatients] = useState([]);
+  const [searchs, setSearchs] = useState("");
   const loadPatients = async () => {
     setLoading(true);
     try {
@@ -20,7 +21,9 @@ const usePatients = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      setPatients(data);
+      // setPatients(data);
+      // console.log(data);
+      return data;
     } catch (error) {
       console.log(error);
     } finally {
@@ -60,6 +63,20 @@ const usePatients = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const patientsData = await loadPatients();
+        setPatients(patientsData);
+      } catch (error) {
+        console.error("Erro ao carregar pacientes:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return {
     addPatient,
     loadPatients,
@@ -67,6 +84,8 @@ const usePatients = () => {
     deletePatient,
     patients,
     loading,
+    searchs,
+    setSearchs,
   };
 };
 export default usePatients;
