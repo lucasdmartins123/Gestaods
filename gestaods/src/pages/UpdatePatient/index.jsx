@@ -170,6 +170,38 @@ export default function UpdatePatient({ patient }) {
   //função que salva as informações do paciente que foram atualizadas
   const handleSaveInfo = (e) => {
     e.preventDefault();
+    if (
+      !data.patient ||
+      !data.nickname ||
+      !data.nationality ||
+      !data.birth ||
+      !data.cpf ||
+      !data.rg ||
+      !data.gender ||
+      !data.civilState ||
+      !data.addtionalObersavations ||
+      !data.cep ||
+      !data.city ||
+      !data.uf ||
+      !data.address ||
+      !data.number ||
+      !data.neighborhood ||
+      !data.complement
+    ) {
+      return alert("preencha todos os campos");
+    }
+    if (data.cpf.length != 11) {
+      return alert("CPF inválido, deve conter 11 dígitos");
+    }
+
+    if (data.rg.length != 10) {
+      return alert("RG inválido, deve conter 10 dígitos");
+    }
+
+    const actualDate = new Date();
+    if (new Date(data.birth).getFullYear() >= actualDate.getFullYear()) {
+      return alert("Data de nascimento inválida");
+    }
     editPatient(patient.id, data);
     localStorage.removeItem("patientData");
     onClose();
@@ -235,7 +267,7 @@ export default function UpdatePatient({ patient }) {
       </ModalDivStyled>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent style={{ minWidth: "800px" }}>
+        <ModalContent className="update_modal">
           <ModalBody>
             <ModalContainerStyled>
               <OptionsStyled>

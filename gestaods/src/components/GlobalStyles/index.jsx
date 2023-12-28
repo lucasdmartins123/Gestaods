@@ -149,5 +149,15 @@ html {
   [hidden] {
     display: none;
   }
+  .update_modal{
+    min-width: 800px;
+    
+  }
+  @media (max-width: 768px) {
+    .update_modal{
+      min-width: 300px;
+    }
+  }
   `;
+
 export default GlobalStyles;

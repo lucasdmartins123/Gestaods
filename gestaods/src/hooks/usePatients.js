@@ -1,29 +1,23 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   addDoc,
-  getDocs,
   updateDoc,
   doc,
   deleteDoc,
   collection,
 } from "firebase/firestore";
 import { db } from "../Firebase/config";
+import { PatientsContext } from "../Context/PatientsContext";
 
 const usePatients = () => {
   const [loading, setLoading] = useState(false);
-  const [patients, setPatients] = useState([]);
-  const [searchs, setSearchs] = useState("");
-  const loadPatients = async () => {
+  const { patients, setPatients } = useContext(PatientsContext);
+
+  const addPatient = async (data) => {
     setLoading(true);
     try {
-      const querySnapshot = await getDocs(collection(db, "patients"));
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      // setPatients(data);
-      // console.log(data);
-      return data;
+      const res = await addDoc(collection(db, "patients"), data);
+      setPatients([...patients, { id: res.id, ...data }]);
     } catch (error) {
       console.log(error);
     } finally {
@@ -35,6 +29,10 @@ const usePatients = () => {
     setLoading(true);
     try {
       await updateDoc(doc(db, "patients", id), data);
+      const updatedPatients = patients.map((patient) =>
+        patient.id === id ? { ...patient, ...data } : patient
+      );
+      setPatients(updatedPatients);
     } catch (error) {
       console.log(error);
     } finally {
@@ -46,46 +44,20 @@ const usePatients = () => {
     setLoading(true);
     try {
       await deleteDoc(doc(db, "patients", id));
+      const updatedPatients = patients.filter((patient) => patient.id !== id);
+      setPatients(updatedPatients);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
   };
-
-  const addPatient = async (data) => {
-    setLoading(true);
-    try {
-      await addDoc(collection(db, "patients"), data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const patientsData = await loadPatients();
-        setPatients(patientsData);
-      } catch (error) {
-        console.error("Erro ao carregar pacientes:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return {
     addPatient,
-    loadPatients,
     editPatient,
     deletePatient,
-    patients,
     loading,
-    searchs,
-    setSearchs,
   };
 };
 export default usePatients;

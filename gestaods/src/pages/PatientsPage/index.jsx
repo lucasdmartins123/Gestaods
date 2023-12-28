@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import usePatients from "../../hooks/usePatients";
 import logo from "../../assets/logo.png";
 import { styled } from "styled-components";
@@ -7,6 +7,7 @@ import { IoIosSearch } from "react-icons/io";
 import { LuArrowUpDown } from "react-icons/lu";
 import PatientAdd from "../AddPatient";
 import ActionModal from "../../components/ActionModal";
+import { PatientsContext } from "../../Context/PatientsContext";
 
 //estilização da logo GestaoDs
 const LogoStyled = styled.div`
@@ -54,9 +55,8 @@ const MidlePageStyled = styled.div`
     padding: 10px 15px;
     border: 1px solid #136cdc;
     margin-left: -15px;
-  }
-  ::placeholder {
-    padding: 0 30px;
+    padding-left: 50px;
+    outline: none;
   }
 `;
 
@@ -71,11 +71,6 @@ const SearchStyled = styled(IoIosSearch)`
 const ArrowStyled = styled(LuArrowUpDown)`
   color: #136cdc;
   font-size: 18px;
-`;
-
-const StyledEllipsis = styled(VscEllipsis)`
-  color: #000000;
-  font-size: 24px;
 `;
 
 //estilização para agrupamento
@@ -151,12 +146,9 @@ const PatientListStyled = styled.div`
 `;
 
 export default function PatientsPage() {
-  const { search, setSearch } = useState("");
-  const { loadPatients, patients, searchs } = usePatients();
-  const [searchResult, setSearchResult] = useState([]);
-  const [showState, setShowState] = useState(false);
-
-  console.log(patients);
+  const [search, setSearch] = useState("");
+  const { patients, handleSearchPatients, searchPatients } =
+    useContext(PatientsContext);
 
   //função para formatar a data
   const formatDate = (date) => {
@@ -176,18 +168,6 @@ export default function PatientsPage() {
     return cpf;
   };
 
-  useEffect(() => {
-    const patientFilter = patients.filter((patient) =>
-      patient?.patient?.toLowerCase().includes(searchs.toLowerCase())
-    );
-    setSearchResult(patientFilter);
-  }, [searchs]);
-
-  //useEffect para carregar os pacientes
-  useEffect(() => {
-    loadPatients();
-  }, []);
-
   return (
     <div>
       <LogoStyled>
@@ -198,7 +178,7 @@ export default function PatientsPage() {
           <h2>Listagem de pacientes</h2>
           <div>
             <div style={{ position: "relative" }}>
-              <SearchStyled>
+              <SearchStyled onClick={() => handleSearchPatients(search)}>
                 <IoIosSearch />
               </SearchStyled>
               <input
@@ -250,31 +230,28 @@ export default function PatientsPage() {
               </ArrowStyled>
             </TextStyleed>
           </TitleListStyled>
-          {patients?.map((patient, index) => (
-            <PatientListStyled key={index}>
-              <p>{patient.patient}</p>
-              <p>{formatCpf(patient.cpf)}</p>
-              <p>{formatDate(patient.birth)}</p>
-              <p>{`${patient.patient.toLowerCase()}@gestaods.com.br`}</p>
-              <p>{patient.city}</p>
-              <ActionModal patient={patient} />
-              {/* <VscEllipsis onClick={toogleState} />
-              {showState ? (
-                <>
-                  <ButtonsListStyled>
-                    <button>
-                      <Link to={`/edit/${patient.id}`}>Editar</Link>
-                    </button>
-                    <button>
-                      <Link to={`/excluir`}>Excluir</Link>
-                    </button>
-                  </ButtonsListStyled>
-                </>
-              ) : (
-                <></>
-              )} */}
-            </PatientListStyled>
-          ))}
+          {searchPatients.length === 0 &&
+            patients.map((patient, index) => (
+              <PatientListStyled key={index}>
+                <p>{patient.patient}</p>
+                <p>{formatCpf(patient.cpf)}</p>
+                <p>{formatDate(patient.birth)}</p>
+                <p>{`${patient.patient.toLowerCase()}@gestaods.com.br`}</p>
+                <p>{patient.city}</p>
+                <ActionModal patient={patient} />
+              </PatientListStyled>
+            ))}
+          {searchPatients.length > 0 &&
+            searchPatients?.map((patient, index) => (
+              <PatientListStyled key={index}>
+                <p>{patient.patient}</p>
+                <p>{formatCpf(patient.cpf)}</p>
+                <p>{formatDate(patient.birth)}</p>
+                <p>{`${patient.patient.toLowerCase()}@gestaods.com.br`}</p>
+                <p>{patient.city}</p>
+                <ActionModal patient={patient} />
+              </PatientListStyled>
+            ))}
         </div>
       </HomeContainerStyled>
     </div>
