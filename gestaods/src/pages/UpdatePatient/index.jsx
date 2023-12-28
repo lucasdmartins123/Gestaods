@@ -7,24 +7,32 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
-  Button,
-  position,
 } from "@chakra-ui/react";
-import { GoPlus } from "react-icons/go";
 
+const ModalDivStyled = styled.div`
+  button {
+    font-size: 14px;
+    color: #656565;
+    padding: 10px 16px;
+  }
+  button:hover {
+    background-color: #edf3fc;
+    color: #136cdc;
+  }
+`;
+
+//estilização do container do modal
 const ModalContainerStyled = styled.div`
   padding: 16px 0px;
 `;
 
+//estilização do container das opções do modal
 const OptionsStyled = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   padding-bottom: 10px;
   border-bottom: 2px solid #ebeef1;
 
@@ -49,10 +57,21 @@ const OptionsStyled = styled.div`
   }
 `;
 
+//estilização do logo do modal
 const LogoStyled = styled.div`
-  padding: 20px 10px;
+  padding: 27px 10px 0 10px;
 `;
 
+//estilização do container das informações do modal
+const InfosStyled = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 16px;
+  column-gap: 48px;
+  padding-top: 30px;
+`;
+
+//estilização do container dos inputs do modal
 const InputContainerStyled = styled.div`
   display: flex;
   flex-direction: column;
@@ -78,21 +97,24 @@ const InputContainerStyled = styled.div`
   }
 `;
 
-const InfosStyled = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  row-gap: 16px;
-  column-gap: 48px;
+//estilização do label do input de observações adicionais
+const LabelObservationsStyled = styled.label`
+  padding-top: 15px;
 `;
 
+//estilização do container do botão do modal
 const ButtonContainerStyled = styled.div`
   width: 100%;
   padding-top: 16px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  button:hover {
+    background-color: #3c89e7;
+  }
 `;
 
+//estilização do botão do modal
 const ButtonStyled = styled.button`
   background-color: #136cdc;
   color: #ffffff;
@@ -102,24 +124,7 @@ const ButtonStyled = styled.button`
   cursor: pointer;
 `;
 
-const StyledPlus = styled(GoPlus)`
-  color: #fff;
-  left: 5px;
-  font-size: 25px;
-  position: absolute;
-`;
-
-const ModalButtonStyled = styled.button`
-  font-size: 14px;
-  color: #656565;
-
-  :hover {
-    background-color: #edf3fc;
-    color: #136cdc;
-  }
-`;
-
-export default function PatientEdit({ patient }) {
+export default function UpdatePatient({ patient }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showInfo, setShowInfo] = useState(true);
   const [data, setData] = useState({
@@ -143,25 +148,31 @@ export default function PatientEdit({ patient }) {
 
   const { editPatient, loading } = usePatients();
 
+  //função que salva as informações do paciente que foram atualizadas
   const handleSaveInfo = (e) => {
     e.preventDefault();
     editPatient(patient.id, data);
     localStorage.removeItem("patientData");
+    onClose();
   };
 
+  //função que alterna entre as informações básicas e de contato do paciente
   const toogleInfoState = () => {
     setShowInfo((prev) => !prev);
   };
 
+  //função que salva os dados do paciente no local storage
   const saveDataOnLocalStorage = () => {
     localStorage.setItem("patientData", JSON.stringify(data));
   };
 
+  //função que alterna para a tela de contato do paciente
   const changeToContact = () => {
     toogleInfoState();
     saveDataOnLocalStorage();
   };
 
+  //função que busca o cep do paciente
   const handleCep = async (cep) => {
     setData((prev) => ({ ...prev, cep }));
     if (cep.length < 8) {
@@ -184,6 +195,7 @@ export default function PatientEdit({ patient }) {
     }
   };
 
+  //função que busca os dados do paciente no local storage
   useEffect(() => {
     const storageData = localStorage.getItem("patientData");
     if (storageData) {
@@ -199,7 +211,9 @@ export default function PatientEdit({ patient }) {
 
   return (
     <>
-      <ModalButtonStyled onClick={onOpen}>Editar</ModalButtonStyled>
+      <ModalDivStyled>
+        <button onClick={onOpen}>Editar</button>
+      </ModalDivStyled>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent style={{ minWidth: "800px" }}>
@@ -341,7 +355,9 @@ export default function PatientEdit({ patient }) {
                     </InputContainerStyled>
                   </InfosStyled>
                   <InputContainerStyled>
-                    <label>Observações adicionais</label>
+                    <LabelObservationsStyled>
+                      Observações adicionais
+                    </LabelObservationsStyled>
                     <input
                       type="text"
                       placeholder="Digite"

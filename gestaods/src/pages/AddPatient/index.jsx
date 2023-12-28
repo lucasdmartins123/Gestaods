@@ -7,24 +7,30 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
   Button,
-  position,
 } from "@chakra-ui/react";
 import { GoPlus } from "react-icons/go";
 
+//estilização do container do modal de adicionar paciente
 const ModalContainerStyled = styled.div`
   padding: 16px 0px;
 `;
 
+//estilização do icone de mais
+const StyledPlus = styled(GoPlus)`
+  color: #fff;
+  left: 5px;
+  font-size: 25px;
+  position: absolute;
+`;
+
+//estilização do container das opções de informações básicas e contato
 const OptionsStyled = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   padding-bottom: 10px;
   border-bottom: 2px solid #ebeef1;
 
@@ -49,10 +55,21 @@ const OptionsStyled = styled.div`
   }
 `;
 
+//estilização da imagem
 const LogoStyled = styled.div`
-  padding: 20px 10px;
+  padding: 27px 10px 0 10px;
 `;
 
+//estilização do container das informações de cadastro
+const InfosStyled = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 16px;
+  column-gap: 48px;
+  padding-top: 30px;
+`;
+
+//estilização do container dos inputs e selects
 const InputContainerStyled = styled.div`
   display: flex;
   flex-direction: column;
@@ -78,21 +95,24 @@ const InputContainerStyled = styled.div`
   }
 `;
 
-const InfosStyled = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  row-gap: 16px;
-  column-gap: 48px;
+//estilização do label das observações adicionais
+const LabelObservationsStyled = styled.label`
+  padding-top: 15px;
 `;
 
+//estilização do container do botão
 const ButtonContainerStyled = styled.div`
   width: 100%;
   padding-top: 16px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  button:hover {
+    background-color: #3c89e7;
+  }
 `;
 
+//estilização do botão
 const ButtonStyled = styled.button`
   background-color: #136cdc;
   color: #ffffff;
@@ -102,14 +122,7 @@ const ButtonStyled = styled.button`
   cursor: pointer;
 `;
 
-const StyledPlus = styled(GoPlus)`
-  color: #fff;
-  left: 5px;
-  font-size: 25px;
-  position: absolute;
-`;
-
-export default function PatientAdd() {
+export default function AddPatient() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showInfo, setShowInfo] = useState(true);
   const [data, setData] = useState({
@@ -133,25 +146,31 @@ export default function PatientAdd() {
 
   const { addPatient, loading } = usePatients();
 
+  //função que salva as informações do paciente no banco de dados
   const handleSaveInfo = (e) => {
     e.preventDefault();
     addPatient(data);
     localStorage.removeItem("patientData");
+    onClose();
   };
 
+  //função para inverter a opção de informações básicas e contato
   const toogleInfoState = () => {
     setShowInfo((prev) => !prev);
   };
 
+  //função que salva as informações do paciente no local storage
   const saveDataOnLocalStorage = () => {
     localStorage.setItem("patientData", JSON.stringify(data));
   };
 
+  //função que alterna entre as opções de informações básicas e contato
   const changeToContact = () => {
     toogleInfoState();
     saveDataOnLocalStorage();
   };
 
+  //função que busca o cep e preenche os campos de endereço
   const handleCep = async (cep) => {
     setData((prev) => ({ ...prev, cep }));
     if (cep.length < 8) {
@@ -174,6 +193,7 @@ export default function PatientAdd() {
     }
   };
 
+  //useEffect para carregar as informações do paciente do local storage
   useEffect(() => {
     const storageData = localStorage.getItem("patientData");
     if (storageData) {
@@ -334,7 +354,9 @@ export default function PatientAdd() {
                     </InputContainerStyled>
                   </InfosStyled>
                   <InputContainerStyled>
-                    <label>Observações adicionais</label>
+                    <LabelObservationsStyled>
+                      Observações adicionais
+                    </LabelObservationsStyled>
                     <input
                       type="text"
                       placeholder="Digite"

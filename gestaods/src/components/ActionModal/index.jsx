@@ -6,9 +6,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
-import PatientEdit from "../../pages/PatientEdit";
-import PatientDelete from "../../pages/PatientDelete";
 import { styled } from "styled-components";
+import DeletePatient from "../../pages/DeletePatient";
+import UpdatePatient from "../../pages/UpdatePatient";
 
 const ModalOptionsStyled = styled.div`
   display: flex;
@@ -26,9 +26,8 @@ export default function ActionModal({ patient }) {
         <ModalContent>
           <ModalBody>
             <ModalOptionsStyled>
-              <PatientEdit patient={patient} />
-              <PatientDelete patient={patient} />
-              {/* <PatientDelete /> */}
+              <UpdatePatient patient={patient} />
+              <DeletePatient patient={patient} />
             </ModalOptionsStyled>
           </ModalBody>
         </ModalContent>

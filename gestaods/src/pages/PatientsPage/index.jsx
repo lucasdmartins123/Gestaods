@@ -2,19 +2,19 @@ import { useEffect, useState } from "react";
 import usePatients from "../../hooks/usePatients";
 import logo from "../../assets/logo.png";
 import { styled } from "styled-components";
-import { Link } from "react-router-dom";
 import { VscEllipsis } from "react-icons/vsc";
 import { IoIosSearch } from "react-icons/io";
-import { GoPlus } from "react-icons/go";
 import { LuArrowUpDown } from "react-icons/lu";
-import PatientAdd from "../PatientAdd";
+import PatientAdd from "../AddPatient";
 import ActionModal from "../../components/ActionModal";
 
+//estilização da logo GestaoDs
 const LogoStyled = styled.div`
   display: flex;
   justify-content: center;
 `;
 
+//estilização do container da página
 const HomeContainerStyled = styled.div`
   max-width: 1032px;
   margin: 0 auto;
@@ -23,15 +23,18 @@ const HomeContainerStyled = styled.div`
   padding: 25px;
 `;
 
+//estilização do meio da página que inclui a mensagem, o input de pesquisao e o botão de adicionar paciente
 const MidlePageStyled = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
   h2 {
     font-family: sans-serif;
+    color: black;
     font-weight: 400;
     font-size: 14px;
     line-height: 21px;
+    padding: 0 16px;
   }
   div {
     display: flex;
@@ -57,13 +60,15 @@ const MidlePageStyled = styled.div`
   }
 `;
 
-const StyledSearch = styled(IoIosSearch)`
+//estilização da lupa na barra de pesquisa
+const SearchStyled = styled(IoIosSearch)`
   color: #136cdc;
   font-size: 24px;
   position: absolute;
 `;
 
-const StyledArrow = styled(LuArrowUpDown)`
+//estilização do icone de setas
+const ArrowStyled = styled(LuArrowUpDown)`
   color: #136cdc;
   font-size: 18px;
 `;
@@ -73,12 +78,14 @@ const StyledEllipsis = styled(VscEllipsis)`
   font-size: 24px;
 `;
 
+//estilização para agrupamento
 const TextStyleed = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
 `;
 
+//estilização para nome, cpf, data de nascimento, email, cidade e ações
 const TitleListStyled = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -95,10 +102,10 @@ const TitleListStyled = styled.div`
     width: 20%;
   }
   div:nth-child(2) {
-    width: 15%;
+    width: 16%;
   }
   div:nth-child(3) {
-    width: 19%;
+    width: 18%;
   }
   div:nth-child(4) {
     width: 25%;
@@ -111,6 +118,7 @@ const TitleListStyled = styled.div`
   }
 `;
 
+//estilização da lista de pacientes
 const PatientListStyled = styled.div`
   display: flex;
   justify-content: center;
@@ -126,10 +134,10 @@ const PatientListStyled = styled.div`
     width: 20%;
   }
   p:nth-child(2) {
-    width: 15%;
+    width: 16%;
   }
   p:nth-child(3) {
-    width: 19%;
+    width: 18%;
   }
   p:nth-child(4) {
     width: 25%;
@@ -146,14 +154,23 @@ export default function PatientsPage() {
   const { search, setSearch } = useState("");
   const { loadPatients, patients } = usePatients();
   const [showState, setShowState] = useState(false);
+
   console.log(patients);
+
+  //função para formatar a data
+  const formatDate = (date) => {
+    const createDate = new Date(date);
+    const format = { year: "numeric", month: "2-digit", day: "2-digit" };
+
+    const formatedDate = createDate.toLocaleDateString("pt-BR", format);
+
+    return formatedDate;
+  };
+
+  //useEffect para carregar os pacientes
   useEffect(() => {
     loadPatients();
   }, []);
-
-  const toogleState = () => {
-    setShowState((prev) => !prev);
-  };
 
   return (
     <div>
@@ -165,9 +182,9 @@ export default function PatientsPage() {
           <h2>Listagem de pacientes</h2>
           <div>
             <div style={{ position: "relative" }}>
-              <StyledSearch>
+              <SearchStyled>
                 <IoIosSearch />
-              </StyledSearch>
+              </SearchStyled>
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -175,55 +192,53 @@ export default function PatientsPage() {
                 placeholder="Pesquisar"
               />
             </div>
-
             <PatientAdd />
-            {/* <button>Adicionar paciente</button> */}
           </div>
         </MidlePageStyled>
         <div>
           <TitleListStyled>
             <TextStyleed>
               <p>Nome</p>
-              <StyledArrow>
+              <ArrowStyled>
                 <LuArrowUpDown />
-              </StyledArrow>
+              </ArrowStyled>
             </TextStyleed>
             <TextStyleed>
               <p>CPF</p>
-              <StyledArrow>
+              <ArrowStyled>
                 <LuArrowUpDown />
-              </StyledArrow>
+              </ArrowStyled>
             </TextStyleed>
             <TextStyleed>
               <p>Data de nascimento</p>
-              <StyledArrow>
+              <ArrowStyled>
                 <LuArrowUpDown />
-              </StyledArrow>
+              </ArrowStyled>
             </TextStyleed>
             <TextStyleed>
               <p>E-mail</p>
-              <StyledArrow>
+              <ArrowStyled>
                 <LuArrowUpDown />
-              </StyledArrow>
+              </ArrowStyled>
             </TextStyleed>
             <TextStyleed>
               <p>Cidade</p>
-              <StyledArrow>
+              <ArrowStyled>
                 <LuArrowUpDown />
-              </StyledArrow>
+              </ArrowStyled>
             </TextStyleed>
             <TextStyleed>
               <p>Ações</p>
-              <StyledArrow>
+              <ArrowStyled>
                 <LuArrowUpDown />
-              </StyledArrow>
+              </ArrowStyled>
             </TextStyleed>
           </TitleListStyled>
           {patients?.map((patient, index) => (
             <PatientListStyled key={index}>
               <p>{patient.patient}</p>
               <p>{patient.cpf}</p>
-              <p>{patient.birth}</p>
+              <p>{formatDate(patient.birth)}</p>
               <p>{`${patient.patient.toLowerCase()}@gestaods.com.br`}</p>
               <p>{patient.city}</p>
               <ActionModal patient={patient} />
