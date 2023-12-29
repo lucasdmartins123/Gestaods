@@ -10,7 +10,6 @@ import {
   TitleLabel,
   ListHeader,
   ListBody,
-  ListContainer,
 } from "./styles";
 
 import PatientAdd from "../../components/AddPatient";
@@ -65,7 +64,7 @@ export default function Home() {
             <PatientAdd />
           </div>
         </MainContent>
-        <ListContainer>
+        <div>
           <ListHeader>
             <TitleLabel>
               <p>Nome</p>
@@ -117,12 +116,12 @@ export default function Home() {
                 <p>{formatDate(patient.birth)}</p>
                 <p>{`${patient.patient.toLowerCase()}@gestaods.com.br`}</p>
                 <p>{patient.city}</p>
-                <div className="modal-btn-container">
+                <div>
                   <ActionModal patient={patient} mainRef={mainRef} />
                 </div>
               </ListBody>
             ))}
-        </ListContainer>
+        </div>
       </Container>
     </MainContainer>
   );

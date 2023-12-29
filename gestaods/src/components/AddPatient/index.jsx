@@ -89,6 +89,25 @@ export default function AddPatient() {
 
     addPatient(data);
     localStorage.removeItem("patientData");
+    setData({
+      patient: "",
+      nickname: "",
+      nationality: "",
+      birth: "",
+      cpf: "",
+      rg: "",
+      gender: "",
+      civilState: "",
+      addtionalObersavations: "",
+      cep: "",
+      city: "",
+      uf: "",
+      address: "",
+      number: "",
+      neighborhood: "",
+      complement: "",
+    });
+    setShowInfo(true);
     onClose();
   };
 
@@ -144,7 +163,7 @@ export default function AddPatient() {
       <Button
         colorScheme="blue"
         onClick={onOpen}
-        style={{ position: "relative" }}
+        style={{ position: "relative", width: "100%" }}
       >
         <AddIcon />
         <span style={{ marginLeft: "25px" }}>Adicionar Paciente</span>

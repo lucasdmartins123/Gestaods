@@ -20,7 +20,6 @@ export const Container = styled.div`
   border-radius: 5px;
   background-color: #f6f6f6;
   padding: 25px;
-  overflow: hidden;
 `;
 
 //estilização do meio da página que inclui a mensagem, o input de pesquisao e o botão de adicionar paciente
@@ -68,8 +67,8 @@ export const MainContent = styled.div`
       flex-direction: column;
     }
     input {
-      margin-left: 6px;
-      padding: 10px 20px;
+      margin: 0px;
+      padding: 10px 32px;
     }
   }
   @media (max-width: 480px) {
@@ -77,9 +76,7 @@ export const MainContent = styled.div`
       padding-bottom: 5px;
     }
     input {
-      padding-left: 30px;
-      margin-left: 8px;
-      padding: 5px 15px;
+      padding: 5px 28px;
     }
   }
 `;
@@ -89,6 +86,7 @@ export const SearchIcon = styled(IoIosSearch)`
   color: #136cdc;
   font-size: 24px;
   position: absolute;
+  cursor: pointer;
   @media (max-width: 768px) {
     left: 8px;
     top: 11px;
@@ -118,11 +116,6 @@ export const TitleLabel = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-`;
-
-export const ListContainer = styled.div`
-  min-width: 1032px;
-  overflow-x: scroll;
 `;
 
 //estilização para nome, cpf, data de nascimento, email, cidade e ações
@@ -173,7 +166,7 @@ export const ListHeader = styled.div`
 export const ListBody = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 10px;
   padding: 16px 0px;
@@ -197,7 +190,7 @@ export const ListBody = styled.div`
   p:nth-child(5) {
     width: 15%;
   }
-  .modal-btn-container {
+  div {
     width: 9%;
   }
   @media (max-width: 768px) {

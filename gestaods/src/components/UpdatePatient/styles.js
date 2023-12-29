@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const OpenButtonContainer = styled.div`
   button {
-    width: 100%;
     font-size: 14px;
     color: #656565;
     padding: 10px 16px;
