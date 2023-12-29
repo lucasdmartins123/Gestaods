@@ -1,7 +1,8 @@
 Nome do Projeto
 GestãoDS
 
-🔥 Introdução
+🔥 Introdução:
+
 Um site para GestãoDS que tem como objetivo visualizar informações de seus pacientes como nome,cpf,data de nascimento, email, cidade, além de poder pesquisar por nome de usuario na barra de pesquisa para procurar um usuario em especifico, além de adicionar pacientes através de um modal que vai cadastrar todas as as informações do usuario, um modal de editar informações de pacientes ja criados, um modal para excluir pacientes ja criados
 
 ⚙️ Pré-requisitos
