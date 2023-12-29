@@ -1,3 +1,4 @@
+//modal utilizado para excluir pacientes
 import figure from "../../assets/figure.svg";
 import { styled } from "styled-components";
 import { VscChromeClose } from "react-icons/vsc";
@@ -117,7 +118,7 @@ export default function DeletePatient({ patient }) {
       </ModalDivStyled>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent style={{ minWidth: "600px" }}>
+        <ModalContent className="delete_modal">
           <ModalBody>
             <form onSubmit={handleSaveInfo}>
               <TopStyled>

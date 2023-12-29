@@ -1,3 +1,5 @@
+//modal usado para criar o container que vai ser armazenado os botões de editar e excluir
+
 import {
   Modal,
   ModalBody,
@@ -11,16 +13,18 @@ import DeletePatient from "../../pages/DeletePatient";
 import UpdatePatient from "../../pages/UpdatePatient";
 import { VscEllipsis } from "react-icons/vsc";
 
+// estilização do container do modal
 const ModalOptionsStyled = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
+// estilização do botão de opções
 const StyledEllipsis = styled(VscEllipsis)`
   color: #000000;
   font-size: 24px;
   @media (max-width: 768px) {
-    color: red;
+    font-size: 12px;
   }
 `;
 

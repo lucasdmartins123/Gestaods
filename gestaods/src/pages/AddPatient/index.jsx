@@ -1,3 +1,4 @@
+//modal utilizado para adicionar pacientes
 import api from "../../axios/config";
 import { useEffect, useState } from "react";
 import usePatients from "../../hooks/usePatients";
@@ -67,6 +68,12 @@ const InfosStyled = styled.div`
   row-gap: 16px;
   column-gap: 48px;
   padding-top: 30px;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 //estilização do container dos inputs e selects
@@ -269,7 +276,7 @@ export default function AddPatient() {
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent style={{ minWidth: "800px" }}>
+        <ModalContent className="add_modal">
           <ModalBody>
             <ModalContainerStyled>
               <OptionsStyled>

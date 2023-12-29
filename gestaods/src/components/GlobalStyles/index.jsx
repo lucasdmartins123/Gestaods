@@ -1,3 +1,5 @@
+//estilização para resetar o css
+
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
@@ -153,10 +155,29 @@ html {
     min-width: 800px;
     
   }
+  .add_modal{
+    min-width: 800px;
+    
+  }
+  .delete_modal{
+    min-width: 600px;
+   
+    
+  }
   @media (max-width: 768px) {
     .update_modal{
-      min-width: 300px;
+      min-width: 250px;
+      margin: 10px;
     }
+    .add_modal{
+    min-width: 250px;
+    margin: 10px;
+    
+  }
+  .delete_modal{
+    min-width: 200px;
+    margin: 10px;
+  }
   }
   `;
 

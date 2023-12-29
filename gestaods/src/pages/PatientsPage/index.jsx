@@ -1,3 +1,5 @@
+//pagina princpal que vai aparecer as informações dos pacientes,usar o modal de adicionar paciente e pesquisar paciente
+
 import { useContext, useEffect, useState } from "react";
 import usePatients from "../../hooks/usePatients";
 import logo from "../../assets/logo.png";
@@ -29,6 +31,7 @@ const MidlePageStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 16px;
   h2 {
     font-family: sans-serif;
     color: black;
@@ -40,8 +43,19 @@ const MidlePageStyled = styled.div`
   div {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
   }
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+  }
+`;
+
+const InputAddPatientStyled = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
   button {
     background-color: #136cdc;
     color: #ffffff;
@@ -57,6 +71,15 @@ const MidlePageStyled = styled.div`
     margin-left: -15px;
     padding-left: 50px;
     outline: none;
+  }
+  @media (max-width: 768px) {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+  input {
+    padding-left: 30px;
+    margin-left: -5px;
   }
 `;
 
@@ -111,6 +134,16 @@ const TitleListStyled = styled.div`
   div:nth-child(6) {
     width: 6%;
   }
+  @media (max-width: 768px) {
+    p {
+      font-size: 12px;
+    }
+  }
+  @media (max-width: 480px) {
+    p {
+      font-size: 10px;
+    }
+  }
 `;
 
 //estilização da lista de pacientes
@@ -142,6 +175,11 @@ const PatientListStyled = styled.div`
   }
   button {
     width: 6%;
+  }
+  @media (max-width: 768px) {
+    p {
+      font-size: 12px;
+    }
   }
 `;
 
@@ -176,7 +214,7 @@ export default function PatientsPage() {
       <HomeContainerStyled>
         <MidlePageStyled>
           <h2>Listagem de pacientes</h2>
-          <div>
+          <InputAddPatientStyled>
             <div style={{ position: "relative" }}>
               <SearchStyled onClick={() => handleSearchPatients(search)}>
                 <IoIosSearch />
@@ -189,7 +227,7 @@ export default function PatientsPage() {
               />
             </div>
             <PatientAdd />
-          </div>
+          </InputAddPatientStyled>
         </MidlePageStyled>
         <div>
           <TitleListStyled>

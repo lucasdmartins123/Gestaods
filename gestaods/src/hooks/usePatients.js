@@ -1,3 +1,5 @@
+//hook usado para as funçoes de criação, edição e remoção de pacientes
+
 import { useContext, useEffect, useState } from "react";
 import {
   addDoc,
@@ -13,6 +15,7 @@ const usePatients = () => {
   const [loading, setLoading] = useState(false);
   const { patients, setPatients } = useContext(PatientsContext);
 
+  //função para adicionar um paciente
   const addPatient = async (data) => {
     setLoading(true);
     try {
@@ -25,6 +28,7 @@ const usePatients = () => {
     }
   };
 
+  //função para editar um paciente
   const editPatient = async (id, data) => {
     setLoading(true);
     try {
@@ -40,6 +44,7 @@ const usePatients = () => {
     }
   };
 
+  //função para deletar um paciente
   const deletePatient = async (id) => {
     setLoading(true);
     try {
