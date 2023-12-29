@@ -1,8 +1,7 @@
 //context criado paracarregar os pacientes na tela e para pesquisar pacientes atraves de um filtro por nome
-
 import { collection, getDocs } from "firebase/firestore";
 import { createContext, useEffect, useState } from "react";
-import { db } from "../Firebase/config";
+import { db } from "../services/Firebase/config";
 import { useToast } from "@chakra-ui/react";
 
 export const PatientsContext = createContext();

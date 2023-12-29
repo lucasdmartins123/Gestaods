@@ -1,5 +1,4 @@
 //hook usado para as funçoes de criação, edição e remoção de pacientes
-
 import { useContext, useEffect, useState } from "react";
 import {
   addDoc,
@@ -8,7 +7,7 @@ import {
   deleteDoc,
   collection,
 } from "firebase/firestore";
-import { db } from "../Firebase/config";
+import { db } from "../services/Firebase/config";
 import { PatientsContext } from "../Context/PatientsContext";
 
 const usePatients = () => {

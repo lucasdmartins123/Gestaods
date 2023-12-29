@@ -1,158 +1,34 @@
-//modal utilizado para editar os pacientes ja criados
-
-import api from "../../axios/config";
 import { useEffect, useState } from "react";
+
 import usePatients from "../../hooks/usePatients";
-import user from "../../assets/user.png";
-import { styled } from "styled-components";
+import api from "../../services/axios/config";
+
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalBody,
   useDisclosure,
+  Button,
 } from "@chakra-ui/react";
 
-const ModalDivStyled = styled.div`
-  button {
-    font-size: 14px;
-    color: #656565;
-    padding: 10px 16px;
-  }
-  button:hover {
-    background-color: #edf3fc;
-    color: #136cdc;
-  }
-`;
+import {
+  ModalContainer,
+  AddIcon,
+  ModalOptions,
+  LogoContainer,
+  InfoContainer,
+  InputContainer,
+  ObservationContainer,
+  ButtonContainer,
+  ModalButton,
+} from "./styles";
 
-//estilização do container do modal
-const ModalContainerStyled = styled.div`
-  padding: 16px 0px;
-`;
+import user from "../../assets/user.png";
 
-//estilização do container das opções do modal
-const OptionsStyled = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #ebeef1;
-
-  button {
-    color: #656565;
-    background-color: #fff;
-    border: none;
-  }
-  .active {
-    position: relative;
-    color: #4f1368;
-  }
-  .active::after {
-    content: "";
-    position: absolute;
-    top: 12px;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-bottom: 2px solid #4f1368;
-    box-sizing: border-box;
-  }
-`;
-
-//estilização do logo do modal
-const LogoStyled = styled.div`
-  padding: 27px 10px 0 10px;
-`;
-
-//estilização do container das informações do modal
-const InfosStyled = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  row-gap: 16px;
-  column-gap: 48px;
-  padding-top: 30px;
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-  }
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-//estilização do container dos inputs do modal
-const InputContainerStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 10px;
-  overflow: hidden;
-  width: 100%;
-
-  input {
-    border-radius: 5px;
-    border: 1px solid #e8e8e8;
-    padding: 10px 15px;
-    max-width: 100%;
-    width: 100%;
-    outline: none;
-  }
-  select {
-    border-radius: 5px;
-    border: 1px solid #e8e8e8;
-    padding: 10px 15px;
-    width: 100%;
-  }
-`;
-
-//estilização do container das observações adicionais
-const ObservationsContainerStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 10px;
-  overflow: hidden;
-  width: 100%;
-  label {
-    padding-top: 15px;
-  }
-  textarea {
-    border-radius: 5px;
-    border: 1px solid #e8e8e8;
-    padding: 10px 15px;
-    max-width: 100%;
-    width: 100%;
-    height: 73px;
-    max-height: 100%;
-    outline: none;
-    resize: none;
-  }
-`;
-//estilização do container do botão do modal
-const ButtonContainerStyled = styled.div`
-  width: 100%;
-  padding-top: 16px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  button:hover {
-    background-color: #3c89e7;
-  }
-`;
-
-//estilização do botão do modal
-const ButtonStyled = styled.button`
-  background-color: #136cdc;
-  color: #ffffff;
-  border-radius: 4px;
-  padding: 8px;
-  border: 1px solid #fff;
-  cursor: pointer;
-`;
-
-export default function UpdatePatient({ patient }) {
+export default function AddPatient() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [showInfo, setShowInfo] = useState(true);
   const [data, setData] = useState({
     patient: "",
@@ -173,9 +49,9 @@ export default function UpdatePatient({ patient }) {
     complement: "",
   });
 
-  const { editPatient, loading } = usePatients();
+  const { addPatient, loading } = usePatients();
 
-  //função que salva as informações do paciente que foram atualizadas
+  //função que salva as informações do paciente no banco de dados
   const handleSaveInfo = (e) => {
     e.preventDefault();
     if (
@@ -210,28 +86,29 @@ export default function UpdatePatient({ patient }) {
     if (new Date(data.birth).getFullYear() >= actualDate.getFullYear()) {
       return alert("Data de nascimento inválida");
     }
-    editPatient(patient.id, data);
+
+    addPatient(data);
     localStorage.removeItem("patientData");
     onClose();
   };
 
-  //função que alterna entre as informações básicas e de contato do paciente
+  //função para inverter a opção de informações básicas e contato
   const toogleInfoState = () => {
     setShowInfo((prev) => !prev);
   };
 
-  //função que salva os dados do paciente no local storage
+  //função que salva as informações do paciente no local storage
   const saveDataOnLocalStorage = () => {
     localStorage.setItem("patientData", JSON.stringify(data));
   };
 
-  //função que alterna para a tela de contato do paciente
+  //função que alterna entre as opções de informações básicas e contato
   const changeToContact = () => {
     toogleInfoState();
     saveDataOnLocalStorage();
   };
 
-  //função que busca o cep do paciente
+  //função que busca o cep e preenche os campos de endereço
   const handleCep = async (cep) => {
     setData((prev) => ({ ...prev, cep }));
     if (cep.length < 8) {
@@ -254,7 +131,7 @@ export default function UpdatePatient({ patient }) {
     }
   };
 
-  //função que busca os dados do paciente no local storage
+  //useEffect para carregar as informações do paciente do local storage
   useEffect(() => {
     const storageData = localStorage.getItem("patientData");
     if (storageData) {
@@ -262,23 +139,22 @@ export default function UpdatePatient({ patient }) {
     }
   }, []);
 
-  useEffect(() => {
-    if (patient) {
-      setData(patient);
-    }
-  }, [patient]);
-
   return (
     <>
-      <ModalDivStyled>
-        <button onClick={onOpen}>Editar</button>
-      </ModalDivStyled>
+      <Button
+        colorScheme="blue"
+        onClick={onOpen}
+        style={{ position: "relative" }}
+      >
+        <AddIcon />
+        <span style={{ marginLeft: "25px" }}>Adicionar Paciente</span>
+      </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent className="update_modal">
+        <ModalContent className="add_modal">
           <ModalBody>
-            <ModalContainerStyled>
-              <OptionsStyled>
+            <ModalContainer>
+              <ModalOptions>
                 <button
                   className={`${showInfo && "active"}`}
                   onClick={toogleInfoState}
@@ -291,15 +167,15 @@ export default function UpdatePatient({ patient }) {
                 >
                   Contato
                 </button>
-              </OptionsStyled>
+              </ModalOptions>
               {showInfo ? (
                 <form>
-                  <LogoStyled>
+                  <LogoContainer>
                     <img src={user} alt="logo gestãoDs" />
-                  </LogoStyled>
+                  </LogoContainer>
 
-                  <InfosStyled>
-                    <InputContainerStyled>
+                  <InfoContainer>
+                    <InputContainer>
                       <label>Paciente:</label>
                       <input
                         type="text"
@@ -312,8 +188,8 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.patient}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>Apelido</label>
                       <input
                         type="text"
@@ -326,8 +202,8 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.nickname}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>Nacionalidade</label>
                       <input
                         type="text"
@@ -340,8 +216,8 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.nationality}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>Nascimento</label>
                       <input
                         type="date"
@@ -354,8 +230,8 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.birth}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>CPF</label>
                       <input
                         type="text"
@@ -365,8 +241,8 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.cpf}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>RG</label>
                       <input
                         type="text"
@@ -376,8 +252,8 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.rg}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>Gênero </label>
                       <select
                         value={data.gender}
@@ -393,8 +269,8 @@ export default function UpdatePatient({ patient }) {
                         <option value="woman">Mulher</option>
                         <option value="Other">Outro</option>
                       </select>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>Estado Civil </label>
                       <select
                         value={data.civilState}
@@ -411,9 +287,9 @@ export default function UpdatePatient({ patient }) {
                         <option value="divorced">Divorciado</option>
                         <option value="widow">Viuvo</option>
                       </select>
-                    </InputContainerStyled>
-                  </InfosStyled>
-                  <ObservationsContainerStyled>
+                    </InputContainer>
+                  </InfoContainer>
+                  <ObservationContainer>
                     <label>Observações adicionais</label>
                     <textarea
                       placeholder="Digite"
@@ -425,17 +301,17 @@ export default function UpdatePatient({ patient }) {
                       }
                       value={data.addtionalObersavations}
                     ></textarea>
-                  </ObservationsContainerStyled>
-                  <ButtonContainerStyled>
-                    <ButtonStyled onClick={changeToContact} type="button">
+                  </ObservationContainer>
+                  <ButtonContainer>
+                    <ModalButton onClick={changeToContact} type="button">
                       Próximo
-                    </ButtonStyled>
-                  </ButtonContainerStyled>
+                    </ModalButton>
+                  </ButtonContainer>
                 </form>
               ) : (
                 <form onSubmit={handleSaveInfo}>
-                  <InfosStyled>
-                    <InputContainerStyled>
+                  <InfoContainer>
+                    <InputContainer>
                       <label>CEP:</label>
                       <input
                         type="text"
@@ -443,8 +319,8 @@ export default function UpdatePatient({ patient }) {
                         onChange={(e) => handleCep(e.target.value)}
                         value={data.cep}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>Cidade</label>
                       <input
                         type="text"
@@ -454,8 +330,8 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.city}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>UF</label>
                       <input
                         type="text"
@@ -465,8 +341,8 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.uf}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>Endereço</label>
                       <input
                         type="text"
@@ -479,8 +355,8 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.address}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>Número</label>
                       <input
                         type="number"
@@ -493,8 +369,8 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.number}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>Bairro</label>
                       <input
                         type="text"
@@ -507,8 +383,8 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.neighborhood}
                       ></input>
-                    </InputContainerStyled>
-                    <InputContainerStyled>
+                    </InputContainer>
+                    <InputContainer>
                       <label>Complemento</label>
                       <input
                         type="text"
@@ -521,18 +397,18 @@ export default function UpdatePatient({ patient }) {
                         }
                         value={data.complement}
                       ></input>
-                    </InputContainerStyled>
-                  </InfosStyled>
-                  <ButtonContainerStyled>
+                    </InputContainer>
+                  </InfoContainer>
+                  <ButtonContainer>
                     {loading ? (
                       <span>Carregando</span>
                     ) : (
-                      <ButtonStyled type="submit">Salvar</ButtonStyled>
+                      <ModalButton type="submit">Salvar</ModalButton>
                     )}
-                  </ButtonContainerStyled>
+                  </ButtonContainer>
                 </form>
               )}
-            </ModalContainerStyled>
+            </ModalContainer>
           </ModalBody>
         </ModalContent>
       </Modal>

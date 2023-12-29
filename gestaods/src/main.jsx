@@ -1,9 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import "./index.css";
 import { BrowserRouter } from "react-router-dom";
-import GlobalStyles from "./components/GlobalStyles";
+import GlobalStyles from "./styles/GlobalStyles";
 import { ChakraProvider } from "@chakra-ui/react";
 import { PatientsProvider } from "./Context/PatientsContext.jsx";
 
